@@ -12,7 +12,7 @@ app.use(express.json());
  * Root endpoint directing users to the correct API path
  */
 app.get('/', (req, res) => {
-  res.send("API ENDPOINT FOR WAIVER DATA - https://sheets-6qb6.onrender.com/sheets-data");
+  res.send("ACCESS DENIED");
 });
 
 /**
