@@ -1,3 +1,4 @@
+//FILE NAME: waiver-codes
 require('dotenv').config();
 const { google } = require('googleapis');
 const path = require('path');
@@ -12,7 +13,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 // "Copy of "Parents of Class of 2026" College Application Fee Information and Waiver Codes (Responses)"
 //SHEET URL: https://docs.google.com/spreadsheets/d/1_dBozutanczzUxfAHaWL7tOE4mFNSt2avtyvM-SfTIo/edit?gid=170229371#gid=170229371
 //SHEET id: 1_dBozutanczzUxfAHaWL7tOE4mFNSt2avtyvM-SfTIo
-const SPREADSHEET_ID = '1_dBozutanczzUxfAHaWL7tOE4mFNSt2avtyvM-SfTIo';
+const SPREADSHEET_ID = '1Lz4nKYUAJdRAzaiOCz4a2_Bah3OGhF3Jl1mwWDPLqic';
 
 async function extractSheetData() {
   try {
@@ -43,7 +44,7 @@ async function extractSheetData() {
     console.log("extracting sheets data..")
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'Form Responses 1!A:Z',
+      range: 'Sheet1!A:Z',
     });
 
     let rows = response.data.values;
@@ -62,8 +63,9 @@ async function extractSheetData() {
     // Find index positions of our target columns
     const schoolNameIndex = headers.indexOf('Name of School');
     const waiverCodeIndex = headers.indexOf('Waiver Code');
+    const valdIndex = headers.indexOf('Validity');
 
-    if (schoolNameIndex === -1 || waiverCodeIndex === -1) {
+    if (schoolNameIndex === -1 || waiverCodeIndex === -1 || valdIndex === -1 ) {
       throw new Error("Required columns ('Name of School' or 'Waiver Code') not found in the sheet headers.");
     }
 
@@ -92,11 +94,19 @@ async function extractSheetData() {
           waiverCode = waiverCode.trim();
         }
 
+        let valdityData = row[valdIndex];
+
+        if (!valdityData || valdityData.trim() === '') {
+            valdityData = '-';
+          } else {
+            valdityData = valdityData.trim();
+          }
+
         // Push the transformed object to the accumulator array
         acc.push({
           School: schoolName,
           Code: waiverCode,
-          Validity: "xx"
+          Validity: valdityData
         });
       }
 
@@ -110,6 +120,8 @@ async function extractSheetData() {
 
   } catch (error) {
     console.error('Error fetching or processing data:', error);
+  } finally {
+    return
   }
 }
 

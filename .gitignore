@@ -1,3 +1,7 @@
 credentials.json
 node_modules
 .env
+sheets-01.js
+sheets-wc.js
+wire.js
+cookies.txt
