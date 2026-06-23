@@ -120,9 +120,7 @@ async function extractSheetData() {
 
   } catch (error) {
     console.error('Error fetching or processing data:', error);
-  } finally {
-    return
-  }
+  } 
 }
 
 // Execute the function
